@@ -221,9 +221,9 @@ Arguments：
 ```
 
 Response：
-'''
+```
 {"coord": {"lon": 121.601, "lat": 23.9926}, "weather": [{"id": 804, "main": "Clouds", "description": "\u9670\uff0c\u591a\u96f2", "icon": "04n"}], "base": "stations", "main": {"temp": 20.73, "feels_like": 21.13, "temp_min": 20.73, "temp_max": 20.73, "pressure": 1018, "humidity": 87, "sea_level": 1018, "grnd_level": 954}, "visibility": 10000, "wind": {"speed": 2.11, "deg": 309, "gust": 1.4}, "clouds": {"all": 100}, "dt": 1744725312, "sys": {"type": 2, "id": 2096350, "country": "TW", "sunrise": 1744666338, "sunset": 1744712078}, "timezone": 28800, "id": 1668885, "name": "Shuiyuandi", "cod": 200}
-'''
+```
 
 ### 步驟三：補充景點推薦 沒有相關工具
 未找到景點相關工具時，模型根據現有知識提供資訊
