@@ -173,7 +173,6 @@ if __name__ == "__main__":
 ![將工具配置到VScode Cline客戶端](images/FastMCP_Tool_Registration_Cline.jpg)
 
 ### 以查詢「我明天要去花蓮玩 有哪些推薦的景點 天氣怎樣?」為例：
-
 ```mermaid
 flowchart TD
     A[使用者輸入：明天去花蓮玩，想知道天氣與景點] --> B[Lat_Lan_Tools<br/>取得經緯度]
@@ -185,11 +184,20 @@ flowchart TD
     F --> G[組合天氣與景點回答]
 ```
 
-### 步驟一：查詢經緯度
+### 步驟一：查詢經緯度 調用'Lat_Lan_Tools'
 ```
 get_lat_lan("花蓮")
 ```
-使用 Lat_Lan_Tools 工具，取得花蓮的經緯度：
+
+模型會根據工具描述自行填入參數:
+Arguments：
+```
+{
+  "place": "花蓮"
+}
+```
+
+Response：
 ```json
 {
   "latitude": 23.991,
@@ -197,16 +205,44 @@ get_lat_lan("花蓮")
 }
 ```
 
-### 步驟二：查詢天氣預報
+### 步驟二：查詢天氣預報 調用'Weather_Tools'
 使用 Weather_Tools 傳入上一步經緯度，取得天氣資訊。
 ```
 get_weather(latitude=23.991, longitude=121.6015)
 ```
 
-### 步驟三：補充景點推薦
-未找到景點相關工具時，模型根據知識庫提供資訊：
+模型會根據工具描述自行填入參數:
+Arguments：
 ```
-花蓮推薦景點有太魯閣、七星潭、清水斷崖、東大門夜市等。
+{
+  "lat": 23.991,
+  "lon": 121.6015
+}
+```
+
+Response：
+'''
+{"coord": {"lon": 121.601, "lat": 23.9926}, "weather": [{"id": 804, "main": "Clouds", "description": "\u9670\uff0c\u591a\u96f2", "icon": "04n"}], "base": "stations", "main": {"temp": 20.73, "feels_like": 21.13, "temp_min": 20.73, "temp_max": 20.73, "pressure": 1018, "humidity": 87, "sea_level": 1018, "grnd_level": 954}, "visibility": 10000, "wind": {"speed": 2.11, "deg": 309, "gust": 1.4}, "clouds": {"all": 100}, "dt": 1744725312, "sys": {"type": 2, "id": 2096350, "country": "TW", "sunrise": 1744666338, "sunset": 1744712078}, "timezone": 28800, "id": 1668885, "name": "Shuiyuandi", "cod": 200}
+'''
+
+### 步驟三：補充景點推薦 沒有相關工具
+未找到景點相關工具時，模型根據現有知識提供資訊
+
+### 最後總結輸出結果
+```
+花蓮明日天氣預報：
+- **天氣狀況：多雲
+- **溫度：20.73°C
+- **體感溫度：21.13°C
+- **濕度：87%
+- **風速：2.11 m/s
+
+推薦景點：
+1. 太魯閣國家公園 - 以壯麗峽谷和步道聞名
+2. 七星潭 - 新月形海灣適合觀賞日出和星砂
+3. 鯉魚潭 - 環湖自行車道與水上活動
+4. 東大門夜市 - 在地美食聚集地（推薦炸彈蔥油餅）
+5. 雲山水夢幻湖 - 落羽松秘境與生態園區
 ```
 
 這種多步驟工具呼叫設計展示了 MCP 在複雜任務中的應用能力。
