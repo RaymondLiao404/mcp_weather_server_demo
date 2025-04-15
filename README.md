@@ -170,7 +170,7 @@ if __name__ == "__main__":
 
 ### 配置到VScode Cline客戶端
 
-![將工具配置到VScode Cline客戶端](images\FastMCP_Tool_Registration_Cline.jpg)
+![將工具配置到VScode Cline客戶端](images/FastMCP_Tool_Registration_Cline.jpg)
 
 ### 以查詢「我明天要去花蓮玩 有哪些推薦的景點 天氣怎樣?」為例：
 
