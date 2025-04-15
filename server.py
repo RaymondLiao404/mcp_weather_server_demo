@@ -1,5 +1,6 @@
 # server.py
 from mcp.server.fastmcp import FastMCP
+from pydantic import BaseModel, Field
 import requests
 import json
 import os
@@ -11,8 +12,8 @@ from dotenv import load_dotenv
 # Load environment variables from .env file
 load_dotenv()
 
-# Create an MCP server
-mcp = FastMCP("Weather_MCP", log_level="WARNING") 
+# Create an MCP server with schemas
+mcp = FastMCP("Weather_MCP", log_level="WARNING")
 
 
 # 靜態資源
@@ -31,7 +32,7 @@ def get_greeting(name: str) -> str:
     name="Lat_Lan_Tools",
     description="根據地名搜尋經緯度",
 )
-def get_lat_lan(place: str) -> json:
+def get_lat_lan(place: str = Field(..., description="地名，例如 台北烘爐地")) -> dict:
     geolocator = Nominatim(user_agent="my-geopy-app")
     location = geolocator.geocode(place, timeout=5)
 
@@ -43,38 +44,27 @@ def get_lat_lan(place: str) -> json:
         "longitude": location.longitude
     }
 
-
 # Weather_Tools
 @mcp.tool(
     name="Weather_Tools",
     description="根據經緯度搜尋天氣預報",
 )
-def get_weather(latitude: float, longitude: float) -> json:
-    '''
-    根據經緯度搜尋天氣預報
 
-    Args:
-        lat (float): 緯度
-        lon (float): 經度
-
-    Returns:
-        json
-    '''
-    
+def get_weather(latitude: float = Field(..., description="緯度，例如 25.033"), longitude: float = Field(..., description="經度，例如 121.5654")) -> json:   
     # 使用openweather的API密鑰
     base_url = 'https://api.openweathermap.org/data/2.5/weather'
     API_KEY = os.getenv('OPENWEATHER_API_KEY')
     
-    params = {
+    query = {
         'lat': latitude,
         'lon': longitude,
-        'appid': API_KEY,   # 使用openweather的API密鑰
-        'units': 'metric',  # 使用攝氏溫度
-        'lang': 'zh_tw'     # 使用繁體中文
+        'appid': API_KEY,
+        'units': 'metric',
+        'lang': 'zh_tw'
     }
     
     try:
-        response = requests.get(base_url, params=params)
+        response = requests.get(base_url, params=query)
         # 檢查請求是否成功
         response.raise_for_status()
         return response.json()
@@ -86,7 +76,6 @@ def get_weather(latitude: float, longitude: float) -> json:
 # sse傳輸格式 選擇下方sse配置文件
 if __name__ == "__main__":
     print("Starting MCP server...")
-    print(get_lat_lan("台北101"))
     mcp.run(transport="sse")
 
 
