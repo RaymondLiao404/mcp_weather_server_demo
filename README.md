@@ -281,8 +281,8 @@ Response：
 - **模型 Function Call 支援**：❌ 不支援
 - **誰負責執行 Function Call**：Cline（根據模型輸出的文字判斷意圖，轉換並執行）
 - **能否對接 MCP**：✅ 是
-- **流程說明**（包含你提到的 Prompt 環節）：
-  1. [Prompt 環節] 客戶端 (Cline) 在發送用戶請求給模型之前，會先在 Prompt 中注入可用工具的描述。這通常是以自然語言或特定格式告知模型：「你可以使用 get_weather(latitude, longitude) 來查詢天氣」。
+- **流程說明**：
+  1. 客戶端 (Cline) 在發送用戶請求給模型之前，會先在 Prompt 中注入可用工具的描述。這通常是以自然語言或特定格式告知模型：「你可以使用 get_weather(latitude, longitude) 來查詢天氣」。
   2. 模型接收到包含用戶請求和工具描述的 Prompt。
   3. 模型理解請求後，決定需要使用工具，但它無法生成結構化的 tool_call，因此它會產出指示性的文字，例如："好的，我來查一下天氣：get_weather(latitude=24.16, longitude=120.64)"。
   4. 客戶端 (Cline) 解析模型回傳的這段文字，識別出 get_weather(...) 的意圖和參數。
