@@ -76,6 +76,7 @@ def get_weather(latitude: float = Field(..., description="緯度，例如 25.033
 # sse傳輸格式 選擇下方sse配置文件
 if __name__ == "__main__":
     print("Starting MCP server...")
+    # mcp.run(transport="stdio")
     mcp.run(transport="sse")
 
 
